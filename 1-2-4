@@ -1,0 +1,61 @@
+1.
+
+SELECT
+    trips.duration,
+	weather.precipitationin
+FROM
+    trips
+JOIN
+    weather
+ON
+    trips.zip_code = weather.zip
+WHERE weather.precipitationin like 'T'
+ORDER BY  trips.duration DESC
+LIMIT 3
+
+2.
+
+WITH 
+    docks
+AS  (
+    SELECT 
+	    station_id,
+		AVG(docks_available) available
+	FROM
+	    status
+	GROUP BY 1
+)
+SELECT 
+    docks.station_id,
+	docks.available
+FROM
+    docks
+JOIN
+    stations
+ON
+    docks.station_id = stations.station_id
+JOIN
+    trips
+ON
+    stations.name = trips.start_station
+JOIN 
+    weather
+ON 
+    trips.zip_code = weather.ZIP
+WHERE 
+    wether.precipitationin like 'T'    
+GROUP BY 1
+
+3.
+
+SELECT
+    station_id,
+	(CASE WHEN docks_available = 0 THEN 'empty' ELSE 'not_empty' END) empty,
+	COUNT(*) times
+FROM 
+    status
+WHERE
+    empty like 'empty'
+GROUP BY 1
+ORDER BY times DESC
+LIMIT 1
