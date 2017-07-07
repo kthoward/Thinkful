@@ -1,0 +1,87 @@
+1.
+
+SELECT 
+    *
+FROM
+    listings
+ORDER BY  price DESC
+LIMIT 1
+
+ANSWER:
+
+A home in Bel-Air is the most expensive topping out at $10,000 a night. According to the projected nights per month it is only rented out 6 nights a month but at the price that brings in $60,000 and would hopefully cover the mortgage (though you would never know in Bel-Air). 
+
+I would also like to run this through Python to see which listings make the most per month based on volume and price and see if I can also project mortgage based on location and the amount they charge. 
+
+I am a bit skeptical of the projected nights a month because it is based on review frequency and minimum nights per stay. 
+
+
+2.
+
+SELECT 
+    neighborhood,
+	AVG(calculated_host_listings_count) average 
+FROM
+    listings
+GROUP BY 1
+ORDER BY  average DESC
+
+ANSWER:
+
+Pico Union at 14.89 nights a month
+
+3-1.
+
+SELECT
+    (CASE WHEN reviews.date >= '2016-01-01' AND reviews.date < '2016-04-01' THEN 'q1'
+	          WHEN reviews.date >= '2016-04-01' AND reviews.date < '2016-07-01' THEN 'q2'
+			  WHEN reviews.date >= '2016-07-01' AND reviews.date < '2016-10-01' THEN 'q3'
+			  WHEN reviews.date >= '2016-10-01' AND reviews.date <= '2016-12-31' THEN 'q4'
+			  ELSE 'na' END) quarter,
+			  AVG(listings.price) average
+FROM
+    reviews
+JOIN 
+    listings
+ON 
+    reviews.listing_id = listings.id
+GROUP BY 1
+ORDER BY quarter DESC
+
+ANSWER:
+
+q4 is the most affordable at an average rate of $130.30. This may be skewed though because it doesn't take into account what we deem affordable and how frequently units on the low and high end of the spectrum are rented during those timeframes. If a super top end unit rented 150% more in q3 that could skew the market.
+
+3-2.
+
+SELECT
+    (CASE WHEN reviews.date >= '2016-01-01' AND reviews.date < '2016-04-01' THEN 'q1'
+	          WHEN reviews.date >= '2016-04-01' AND reviews.date < '2016-07-01' THEN 'q2'
+			  WHEN reviews.date >= '2016-07-01' AND reviews.date < '2016-10-01' THEN 'q3'
+			  WHEN reviews.date >= '2016-10-01' AND reviews.date <= '2016-12-31' THEN 'q4'
+			  ELSE 'na' END) quarter,
+			  AVG(listings.calculated_host_listings_count) average
+FROM
+    reviews 
+JOIN 
+    listings
+ON
+    reviews.listing_id = listings.id
+WHERE 
+    listings.calculated_host_listings_count > 0
+GROUP BY quarter
+ORDER BY quarter DESC
+
+ANSWER:
+
+q1 is the least busy time to visit LA with the average room being rented 3.744 nights. I would probably up the parameters and look for more popular rooms by having:
+
+WHERE 
+    listings.calculated_host_listings_count > 0
+    
+be:
+
+WHERE 
+    listings.calculated_host_listings_count > 10
+    
+To make sure I am looking at desirable rooms. In hind sight I would do that in the seasonality question too.
