@@ -43,7 +43,7 @@ JOIN
 ON 
     trips.zip_code = weather.ZIP
 WHERE 
-    wether.precipitationin like 'T'    
+    weather.precipitationin like 'T'    
 GROUP BY 1
 
 3.
