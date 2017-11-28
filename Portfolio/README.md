@@ -1,1 +1,1 @@
-These are examples of my work in data science.
+Here you will find examples of my professional projects in data science. The most recent project is the NLP capstone and best represents my work. I am happy to provide further examples of projects and models that I have built. The slide deck is an example of a presentation that I have produced as well as conceptualized. 
